@@ -1,5 +1,7 @@
-const express = require('express');
-const cors = require('cors');
+import express from 'express';
+import cors from 'cors';
+import personRouter from './svr/routes/person.routes';
+
 const app = express();
 
 require('./svr/config/mongoose.config');
@@ -7,7 +9,9 @@ require('./svr/config/mongoose.config');
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-require('./svr/routes/person.routes')(app);
+
+// Routes
+app.use(personRouter);
 
 const port = 8000;
 
