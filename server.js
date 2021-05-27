@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import personRouter from './svr/routes/person.routes';
+import personRouter from './svr/routes/person.routes.js';
 
 const app = express();
 
-require('./svr/config/mongoose.config');
+import * as db from './svr/config/mongoose.config.js';
 
 app.use(cors());
 app.use(express.json());

@@ -1,10 +1,4 @@
-const { Person } = require('../models/person.model');
-
-module.exports.index = (req, res) => {
-  res.json({
-    title: 'Book Bay Drag',
-  });
-};
+import { Person } from '../models/person.model.js';
 
 const createPerson = async (req, res) => {
   try {

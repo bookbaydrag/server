@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/crmdb', {
+import mongoose from 'mongoose';
+
+mongoose.connect('mongodb://mongo.seannyphoenix.com:27017/bbd', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
