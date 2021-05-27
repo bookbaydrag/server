@@ -1,5 +1,7 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
 import { v4 as uuid } from 'uuid';
+
+const {Schema, model} = mongoose;
 
 const PersonSchema = new Schema({
   // Mandatory fields --------------------------------
