@@ -1,10 +1,19 @@
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 
-console.log('db')
+export const dbConnect = async (): Promise<Mongoose> => {
+  try {
+    await mongoose.connect('mongodb://mongo.seannyphoenix.com:27017/bbd', {
+      useNewUrlParser: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
+      useUnifiedTopology: true,
+    });
+    console.log('DB connection successful');
+  } catch (error) {
+    console.log('Error connecting to database:\n' + error);
+  } finally {
+    return mongoose;
+  }
+};
 
-mongoose.connect('mongodb://mongo.seannyphoenix.com:27017/bbd', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-    .then(() => console.log('Established connection to the database'))
-    .catch((err) => console.log('Something when wrong connecting to the database: ', err));
+export const dbDisconnect = mongoose.disconnect;
