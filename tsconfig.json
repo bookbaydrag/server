@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "build/",
+    "strict": true,
+    "target": "ES2020",
+    "declaration": true,
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"],
+  "watchOptions": {
+    "watchDirectory": "usefsevents"
+  }
+}

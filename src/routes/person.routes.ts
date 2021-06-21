@@ -1,7 +1,7 @@
-import { Router } from 'express';
+import * as express from 'express';
 import PersonController from '../controllers/person.controller.js';
 
-const personRouter = new Router;
+const personRouter = express.Router();
 
 // Performer API calls to DB
 // personRouter.get('/api', PersonController.index);
