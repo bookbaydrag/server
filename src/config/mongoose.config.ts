@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+console.log('db')
+
 mongoose.connect('mongodb://mongo.seannyphoenix.com:27017/bbd', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
