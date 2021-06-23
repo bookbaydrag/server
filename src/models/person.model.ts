@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { v4 as uuid } from 'uuid';
 
-const {Schema, model} = mongoose;
+const { Schema, model } = mongoose;
 
 const PersonSchema = new Schema({
   // Mandatory fields --------------------------------
@@ -10,11 +10,11 @@ const PersonSchema = new Schema({
     default: uuid,
   },
   dragName: { type: String, required: true, minlength: 1 },
-  pronouns: { type: String, required: true, minlength: 1 },
-  phone: { type: String, required: true, minlength: 10 },
-  email: { type: String, required: true, minlength: 5 },
-  contactMethod: { type: Array, required: true, minlength: 1 },
-  city: { type: String, required: true, minlength: 1 },
+  pronouns: { type: String },
+  phone: { type: String },
+  email: { type: String },
+  contactMethod: { type: [String] },
+  city: { type: String },
 
   // Optional fields ---------------------------------
   picture: { type: String },
