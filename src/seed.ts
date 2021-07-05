@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { dbConnect, dbDisconnect } from './config/mongoose.config.js';
-import { Person } from './models/person.model.js';
+import { Person } from './models/index.js';
 
 
 async function seed() {

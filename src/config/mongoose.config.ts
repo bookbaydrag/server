@@ -2,15 +2,16 @@ import mongoose, { Mongoose } from 'mongoose';
 
 export const dbConnect = async (): Promise<Mongoose> => {
   try {
+    console.info('Connecting to database...');
     await mongoose.connect('mongodb://mongo.seannyphoenix.com:27017/bbd', {
       useNewUrlParser: true,
       useFindAndModify: false,
       useCreateIndex: true,
       useUnifiedTopology: true,
     });
-    console.log('DB connection successful');
+    console.info('DB connection successful');
   } catch (error) {
-    console.log('Error connecting to database:\n' + error);
+    console.info('Error connecting to database:\n' + error);
   } finally {
     return mongoose;
   }

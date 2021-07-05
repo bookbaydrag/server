@@ -17,5 +17,6 @@ module.exports = {
   'rules': {
     'object-curly-spacing': ['warn', 'always'],
     'require-jsdoc': 'off',
+    'new-cap': 'off',
   },
 };

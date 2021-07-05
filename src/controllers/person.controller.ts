@@ -50,12 +50,10 @@ const deletePerson = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const PersonController = {
+export const PersonController = {
   createPerson,
   getAllPeople,
   getOnePerson,
   updatePerson,
   deletePerson,
 };
-
-export default PersonController;
