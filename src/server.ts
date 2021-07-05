@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import personRouter from './routes/person.routes.js';
+import { PersonRouter } from './routes/index.js';
 import { dbConnect } from './config/mongoose.config.js';
 
 const server = async (): Promise<void> => {
@@ -12,7 +12,7 @@ const server = async (): Promise<void> => {
   app.use(express.urlencoded({ extended: true }));
 
   // Routes
-  app.use(personRouter);
+  app.use('/api/v1', PersonRouter);
 
   const port = 8000;
 
