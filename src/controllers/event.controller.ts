@@ -12,7 +12,11 @@ const createEvent = async (req: Request, res: Response): Promise<void> => {
 
 const getAllEvents = async (req: Request, res: Response): Promise<void> => {
   try {
-    const events = await Event.find({});
+    const events = await Event.find({})
+        .populate({
+          path: 'performers',
+          select: ['_id', 'dragName'],
+        } );
     res.json(events);
   } catch (error) {
     res.json(error);
@@ -21,7 +25,11 @@ const getAllEvents = async (req: Request, res: Response): Promise<void> => {
 
 const getOneEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const event = await Event.findById(req.params.id);
+    const event = await Event.findById(req.params.id)
+        .populate({
+          path: 'performers',
+          select: ['_id', 'dragName'],
+        } );
     res.json(event);
   } catch (error) {
     res.json(error);
