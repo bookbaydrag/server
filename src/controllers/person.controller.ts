@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Person } from '../models/person.model.js';
+import { Person } from '../models/index.js';
 
 const createPerson = async (req: Request, res: Response): Promise<void> => {
   try {
