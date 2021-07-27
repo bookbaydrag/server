@@ -1,6 +1,7 @@
-import { Person } from '../models/person.model.js';
+import { Request, Response } from 'express';
+import { Person } from '../models/index.js';
 
-const createPerson = async (req, res) => {
+const createPerson = async (req: Request, res: Response): Promise<void> => {
   try {
     const newPerson = await Person.create(req.body);
     res.json(newPerson);
@@ -9,7 +10,7 @@ const createPerson = async (req, res) => {
   }
 };
 
-const getAllPeople = async (req, res) => {
+const getAllPeople = async (req: Request, res: Response): Promise<void> => {
   try {
     const persons = await Person.find({});
     res.json(persons);
@@ -18,7 +19,7 @@ const getAllPeople = async (req, res) => {
   }
 };
 
-const getOnePerson = async (req, res) => {
+const getOnePerson = async (req: Request, res: Response): Promise<void> => {
   try {
     const person = await Person.findById(req.params.id);
     res.json(person);
@@ -27,7 +28,7 @@ const getOnePerson = async (req, res) => {
   }
 };
 
-const updatePerson = async (req, res) => {
+const updatePerson = async (req: Request, res: Response): Promise<void> => {
   try {
     const updatedPerson = await Person.findByIdAndUpdate(
         req.params.id,
@@ -40,7 +41,7 @@ const updatePerson = async (req, res) => {
   }
 };
 
-const deletePerson = async (req, res) => {
+const deletePerson = async (req: Request, res: Response): Promise<void> => {
   try {
     const deleted = await Person.findByIdAndDelete(req.params.id);
     res.json(deleted);
@@ -49,12 +50,10 @@ const deletePerson = async (req, res) => {
   }
 };
 
-const PersonController = {
+export const PersonController = {
   createPerson,
   getAllPeople,
   getOnePerson,
   updatePerson,
   deletePerson,
 };
-
-export default PersonController;
