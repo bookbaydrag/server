@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid-mongodb';
 
 const { Schema, model } = mongoose;
 
 const PersonSchema = new Schema({
   // Mandatory fields --------------------------------
   _id: {
-    type: String,
+    type: 'object',
+    value: { type: 'Buffer' },
     default: uuid,
   },
   dragName: { type: String, required: true, minlength: 1 },
