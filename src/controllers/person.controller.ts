@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import MUUID from 'uuid-mongodb';
 import { Person } from '../models/index.js';
 
 const createPerson = async (req: Request, res: Response): Promise<void> => {
@@ -21,7 +22,7 @@ const getAllPeople = async (req: Request, res: Response): Promise<void> => {
 
 const getOnePerson = async (req: Request, res: Response): Promise<void> => {
   try {
-    const person = await Person.findById(req.params.id);
+    const person = await Person.findById(MUUID.from(req.params.id));
     res.json(person);
   } catch (error) {
     res.json(error);
@@ -31,7 +32,7 @@ const getOnePerson = async (req: Request, res: Response): Promise<void> => {
 const updatePerson = async (req: Request, res: Response): Promise<void> => {
   try {
     const updatedPerson = await Person.findByIdAndUpdate(
-        req.params.id,
+        MUUID.from(req.params.id),
         req.body,
         { new: true },
     );
@@ -43,7 +44,7 @@ const updatePerson = async (req: Request, res: Response): Promise<void> => {
 
 const deletePerson = async (req: Request, res: Response): Promise<void> => {
   try {
-    const deleted = await Person.findByIdAndDelete(req.params.id);
+    const deleted = await Person.findByIdAndDelete(MUUID.from(req.params.id));
     res.json(deleted);
   } catch (error) {
     res.json(error);
