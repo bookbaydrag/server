@@ -1,12 +1,17 @@
 import mongoose from 'mongoose';
-import { v4 as uuid } from 'uuid-mongodb';
+import MUUID from 'uuid-mongodb';
+import {
+  binaryUUID,
+  binaryUUIDArray,
+  toUUID,
+} from '../util/uuid.js';
 
 const { Schema, model } = mongoose;
+const { v4: uuid } = MUUID;
 
 const EventSchema = new Schema({
   _id: {
-    type: 'object',
-    value: { type: 'Buffer' },
+    ...binaryUUID,
     default: uuid,
   },
   name: {
@@ -16,15 +21,16 @@ const EventSchema = new Schema({
   city: {
     type: String,
     required: true,
-    // minlength: 1,
   },
-  host: {
-    type: String,
+  hosts: {
+    ...binaryUUIDArray,
     ref: 'Person',
+    set: toUUID,
   },
   performers: {
-    type: [String],
+    ...binaryUUIDArray,
     ref: 'Person',
+    set: toUUID,
   },
 });
 
