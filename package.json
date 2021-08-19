@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build-watch": "tsc --watch",
+    "publish": "./docker-push.sh",
     "start": "npx nodemon ./build/server.js",
     "seed": "node build/seed.js"
   },
@@ -15,18 +16,18 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "mongoose": "^5.12.14",
-    "uuid": "^8.3.2"
+    "mongoose": "^5.13.5",
+    "uuid-mongodb": "^2.4.4"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.10",
-    "@types/express": "^4.17.12",
-    "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^4.26.1",
-    "@typescript-eslint/parser": "^4.26.1",
-    "eslint": "^7.28.0",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/parser": "^4.29.0",
+    "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.5"
   }
 }

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import MUUID from 'uuid-mongodb';
 import { Event } from '../models/index.js';
 
 const populateRules = [{
@@ -31,7 +32,9 @@ const getAllEvents = async (req: Request, res: Response): Promise<void> => {
 
 const getOneEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const event = await Event.findById(req.params.id).populate(populateRules);
+    const event = await Event.findById(
+        MUUID.from(req.params.id),
+    ).populate(populateRules);
     if (!event) {
       res.sendStatus(404);
     }
@@ -44,7 +47,7 @@ const getOneEvent = async (req: Request, res: Response): Promise<void> => {
 const updateEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const updatedEvent = await Event.findByIdAndUpdate(
-        req.params.id,
+        MUUID.from(req.params.id),
         req.body,
         { new: true },
     ).populate(populateRules);
@@ -59,7 +62,7 @@ const updateEvent = async (req: Request, res: Response): Promise<void> => {
 
 const deleteEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const deleted = await Event.findByIdAndDelete(req.params.id);
+    const deleted = await Event.findByIdAndDelete(MUUID.from(req.params.id));
     res.status(200).json(!!deleted);
   } catch (error) {
     res.status(500).json(error);
