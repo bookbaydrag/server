@@ -1,9 +1,12 @@
 import mongoose, { Mongoose } from 'mongoose';
+import dotenv from 'dotenv';
 
 export const dbConnect = async (): Promise<Mongoose> => {
   try {
+    dotenv.config();
+    const DBURI = process.env.MONGODB_URI || '';
     console.info('Connecting to database...');
-    await mongoose.connect('mongodb://mongo.seannyphoenix.com:27017/bbd', {
+    await mongoose.connect(DBURI, {
       useNewUrlParser: true,
       useFindAndModify: false,
       useCreateIndex: true,

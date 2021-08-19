@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build-watch": "tsc --watch",
+    "publish": "./docker-push.sh",
     "start": "npx nodemon ./build/server.js",
     "seed": "node build/seed.js"
   },
@@ -15,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^5.13.5",
     "uuid-mongodb": "^2.4.4"

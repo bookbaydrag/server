@@ -2,8 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import { APIRouterV1 } from './routes/index.js';
 import { dbConnect } from './config/mongoose.config.js';
+import {
+  addServerToSignalHandling,
+  initSignalHandling,
+} from './util/signal.js';
 
 const server = async (): Promise<void> => {
+  initSignalHandling();
   await dbConnect();
 
   const app = express();
@@ -16,7 +21,10 @@ const server = async (): Promise<void> => {
 
   const port = 8000;
 
-  app.listen(port, () => console.log(`Listening on port ${port}`) );
+  const server = app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
+  addServerToSignalHandling(server);
 };
 
 server();
