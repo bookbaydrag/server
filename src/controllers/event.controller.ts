@@ -2,44 +2,43 @@ import { Request, Response } from 'express';
 import MUUID from 'uuid-mongodb';
 import { Event } from '../models/index.js';
 
+const populateRules = [{
+  path: 'performers',
+  select: ['_id', 'dragName'],
+},
+{
+  path: 'host',
+  select: ['_id', 'dragName'],
+}];
+
 const createEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const newEvent = await Event.create(req.body);
-    res.json(newEvent);
+    await Event.populate(newEvent, populateRules);
+    res.status(201).json(newEvent);
   } catch (error) {
-    res.json(error);
+    res.status(400).json(error);
   }
 };
 
 const getAllEvents = async (req: Request, res: Response): Promise<void> => {
   try {
-    const events = await Event.find({})
-        .populate([{
-          path: 'performers',
-          select: ['_id', 'dragName'],
-        },
-        {
-          path: 'hosts',
-          select: ['_id', 'dragName'],
-        }]);
-    res.json(events);
+    const events = await Event.find({}).populate(populateRules);
+    res.status(200).json(events);
   } catch (error) {
-    res.json(error);
+    res.status(500).json(error);
   }
 };
 
 const getOneEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    const event = await Event.findById(MUUID.from(req.params.id))
-        .populate({
-          path: 'performers',
-          select: ['_id', 'dragName'],
-        })
-        .populate({
-          path: 'hosts',
-          select: ['_id', 'dragName'],
-        });
-    res.json(event);
+    const event = await Event.findById(
+        MUUID.from(req.params.id),
+    ).populate(populateRules);
+    if (!event) {
+      res.sendStatus(404);
+    }
+    res.status(200).json(event);
   } catch (error) {
     res.json(error);
   }
@@ -51,27 +50,22 @@ const updateEvent = async (req: Request, res: Response): Promise<void> => {
         MUUID.from(req.params.id),
         req.body,
         { new: true },
-    )
-        .populate({
-          path: 'performers',
-          select: ['_id', 'dragName'],
-        })
-        .populate({
-          path: 'hosts',
-          select: ['_id', 'dragName'],
-        });
-    res.json(updatedEvent);
+    ).populate(populateRules);
+    if (!updateEvent) {
+      res.sendStatus(404);
+    }
+    res.status(200).json(updatedEvent);
   } catch (error) {
-    res.json(error);
+    res.status(500).json(error);
   }
 };
 
 const deleteEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const deleted = await Event.findByIdAndDelete(MUUID.from(req.params.id));
-    res.json(deleted);
+    res.status(200).json(!!deleted);
   } catch (error) {
-    res.json(error);
+    res.status(500).json(error);
   }
 };
 
