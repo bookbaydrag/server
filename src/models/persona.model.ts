@@ -36,4 +36,4 @@ const PersonSchema = new Schema({
   // sexuality: { type: String },
 }, { timestamps: true });
 
-export const Person = model('Person', PersonSchema);
+export const Persona = model('Persona', PersonSchema);

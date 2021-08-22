@@ -1,17 +1,17 @@
 import fs from 'fs';
 import { dbConnect, dbDisconnect } from './config/mongoose.config.js';
-import { Person } from './models/index.js';
+import { Persona } from './models/index.js';
 
 
 async function seed() {
   try {
     await dbConnect();
 
-    const deleted = await Person.deleteMany({});
-    console.log(`Deleted ${deleted.n} persons.`);
+    const deleted = await Persona.deleteMany({});
+    console.log(`Deleted ${deleted.n} personas.`);
 
     const data = fs.readFileSync(`${process.cwd()}/local/data.csv`).toString();
-    const performers = data
+    const personas = data
         .split('\r\n')
         .map((line) => {
           const [dragName, city, instagram, pronouns] = line.split(',');
@@ -23,8 +23,8 @@ async function seed() {
           };
         });
 
-    const res = await Person.create(performers);
-    console.log(`Created ${res.length} persons.`);
+    const res = await Persona.create(personas);
+    console.log(`Created ${res.length} personas.`);
   } catch (error) {
     console.error(error);
   } finally {
