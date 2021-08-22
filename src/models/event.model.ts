@@ -24,12 +24,12 @@ const EventSchema = new Schema({
   },
   hosts: {
     ...binaryUUIDArray,
-    ref: 'Person',
+    ref: 'Persona',
     set: toUUID,
   },
   performers: {
     ...binaryUUIDArray,
-    ref: 'Person',
+    ref: 'Persona',
     set: toUUID,
   },
 });

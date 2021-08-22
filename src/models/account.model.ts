@@ -18,7 +18,7 @@ const AccountSchema = new Schema({
   },
   personas: {
     ...binaryUUIDArray,
-    ref: 'Person',
+    ref: 'Persona',
     set: toUUID,
   },
 });
