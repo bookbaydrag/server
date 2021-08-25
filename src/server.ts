@@ -17,7 +17,7 @@ const server = async (): Promise<void> => {
   app.use(express.urlencoded({ extended: true }));
 
   // Routes
-  app.use('/api/v1', APIRouterV1);
+  app.use('/v1', APIRouterV1);
 
   const port = 8000;
 

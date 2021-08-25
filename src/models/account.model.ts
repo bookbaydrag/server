@@ -15,6 +15,7 @@ const AccountSchema = new Schema({
     required: true,
     lowercase: true,
     trim: true,
+    index: 1,
   },
   personas: {
     ...binaryUUIDArray,
