@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import MUUID from 'uuid-mongodb';
-import { binaryUUID } from '../util/uuid.js';
+import { binaryUUID, toUUID } from '../util/uuid.js';
 
 const { Schema, model } = mongoose;
 const { v4: uuid } = MUUID;
@@ -13,6 +13,11 @@ const PersonSchema = new Schema({
   },
   dragName: { type: String, required: true },
   pronouns: { type: String },
+  account: {
+    ...binaryUUID,
+    ref: 'Account',
+    set: toUUID,
+  },
   // phone: { type: String },
   // email: { type: String },
   // contactMethod: { type: [String] },

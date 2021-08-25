@@ -11,7 +11,7 @@ const createAccount = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getOneAccount = async (req: Request, res: Response): Promise<void> => {
+const getAccount = async (req: Request, res: Response): Promise<void> => {
   try {
     const account = await Account.findById(MUUID.from(req.params.id))
         .populate({
@@ -54,7 +54,7 @@ const deleteAccount = async (req: Request, res: Response): Promise<void> => {
 
 export const AccountController = {
   createAccount,
-  getOneAccount,
+  getAccount,
   updateAccount,
   deleteAccount,
 };
