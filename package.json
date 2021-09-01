@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "build-watch": "tsc --watch",
-    "publish": "./docker-push.sh",
+    "publish": "./publish.sh",
     "start": "npx nodemon ./build/server.js",
     "seed": "node build/seed.js"
   },

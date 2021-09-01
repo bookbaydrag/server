@@ -43,12 +43,15 @@ async function createSession(req: Request, res: Response): Promise<void> {
     const newSession = await Session.create({
       account: foundToken.account,
     });
-    newSession.populate(populateRules);
-    await newSession.execPopulate();
+
+    const newSessionWithAccount = await Session.findById(
+        MUUID.from(newSession._id),
+    )
+        .populate(populateRules);
 
     res
         .status(200)
-        .json(newSession);
+        .json(newSessionWithAccount);
     return;
   } catch (error) {
     handleError(res, error);
