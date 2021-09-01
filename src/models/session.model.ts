@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import MUUID from 'uuid-mongodb';
-import { setExpiration } from '../util/expiration.js';
+import { ONE_WEEK, setExpiration } from '../util/expiration.js';
 import { binaryUUID, toUUID } from '../util/uuid.js';
 
 const { Schema, model } = mongoose;
@@ -18,8 +18,7 @@ const SessionSchema = new Schema({
   },
   expiration: {
     type: Number,
-    // 1 week
-    default: ()=>setExpiration(10080),
+    default: ()=>setExpiration(ONE_WEEK),
   },
 });
 
