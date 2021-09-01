@@ -26,11 +26,17 @@ export const httpErrors: {[status: string]: string} = {
   500: 'Server Error',
 };
 
-export function validateUUID(uuid: string | MUUID.MUUID): void {
+export function validateUUID(
+    uuid: string | MUUID.MUUID | undefined,
+    message?: string,
+): void {
   try {
+    if (!uuid) {
+      throw new Error;
+    }
     MUUID.from(uuid);
   } catch (error) {
-    throw new ServerError(400, 'invalid uuid');
+    throw new ServerError(400, message || 'invalid uuid');
   }
 }
 
