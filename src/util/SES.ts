@@ -6,6 +6,7 @@ const sesv2 = new AWS.SESV2({ apiVersion: 'latest' });
 
 function createMagicLinkEmail(token: string): string {
   const magicLink = `https://bookbaydrag.com/account/${token}`;
+  // const magicLink = `http://localhost:3000/account/${token}`;
   return `Follow this link to complete sign-in. ${magicLink}`;
 }
 

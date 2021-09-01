@@ -46,9 +46,15 @@ export function validateNotExpired(time: number, message?: string): void {
   }
 }
 
-export function handleError(res: Response, error: ServerError): void {
+export function handleError(res: Response, error: any): void {
+  let status = 500;
+
+  if (error instanceof ServerError) {
+    status = error.statusCode;
+  }
+
   res
-      .status(error.statusCode)
+      .status(status)
       .json({
         error: error.message,
       });
