@@ -10,5 +10,5 @@ export const APIRouterV1 = express.Router();
 APIRouterV1.use('/accounts', AccountRouter);
 APIRouterV1.use('/events', EventRouter);
 APIRouterV1.use('/personas', PersonaRouter);
-APIRouterV1.use('/session', SessionRouter);
+APIRouterV1.use('/sessions', SessionRouter);
 APIRouterV1.use('/tokens', TokenRouter);
