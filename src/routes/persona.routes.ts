@@ -8,3 +8,4 @@ PersonaRouter.get('/:id', PersonController.getPersona);
 PersonaRouter.post('/', PersonController.createPersona);
 PersonaRouter.put('/:id', PersonController.updatePersona);
 PersonaRouter.delete('/:id', PersonController.deletePersona);
+PersonaRouter.get('/search/:searchTerm', PersonController.searchPersonas);

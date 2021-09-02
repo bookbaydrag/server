@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import MUUID from 'uuid-mongodb';
 import { Account, Persona } from '../models/index.js';
+import { handleError, validateExists } from '../util/error.js';
 
 const createPersona = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -88,10 +89,27 @@ const deletePersona = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const searchPersonas = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const searchTerm: string = req.params.searchTerm;
+    validateExists(searchTerm);
+
+    // @ts-ignore
+    const foundPersonas = await Persona.fuzzySearch(searchTerm);
+
+    res
+        .status(200)
+        .json(foundPersonas);
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
 export const PersonController = {
   createPersona,
   indexPersonas,
   getPersona,
   updatePersona,
   deletePersona,
+  searchPersonas,
 };
