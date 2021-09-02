@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import fuzzySearching from 'mongoose-fuzzy-searching';
 import MUUID from 'uuid-mongodb';
 import { binaryUUID, toUUID } from '../util/uuid.js';
 
@@ -39,6 +40,8 @@ const PersonSchema = new Schema({
   // accommodations: { type: [String] },
   // causes: { type: [String] },
   // sexuality: { type: String },
-}, { timestamps: true });
+});
+
+PersonSchema.plugin(fuzzySearching, { fields: ['dragName'] });
 
 export const Persona = model('Persona', PersonSchema);
