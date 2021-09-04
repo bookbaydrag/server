@@ -1,13 +1,34 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 import fuzzySearching from 'mongoose-fuzzy-searching';
 import MUUID from 'uuid-mongodb';
+import { Owned } from '../util/authorization.js';
 import { binaryUUID, toUUID } from '../util/uuid.js';
 
 const { Schema, model } = mongoose;
 const { v4: uuid } = MUUID;
 
-const PersonSchema = new Schema({
-  // Mandatory fields --------------------------------
+export interface BasePersona {
+  dragName: string;
+  pronouns: string;
+  account: any;
+  gender: string;
+  race: string;
+  ethnicity: string;
+  sexuality: string;
+}
+
+export interface PersonaDocument extends
+  BasePersona,
+  Document,
+  Owned
+  {};
+
+export interface PersonaModel extends Model<PersonaDocument> {
+  getOwners: ()=>string[];
+  fuzzySearch: (seachTerm: string) => PersonaDocument[];
+};
+
+const PersonaSchema = new Schema<PersonaDocument>({
   _id: {
     ...binaryUUID,
     default: uuid,
@@ -19,12 +40,15 @@ const PersonSchema = new Schema({
     ref: 'Account',
     set: toUUID,
   },
+  gender: { type: String },
+  race: { type: String },
+  ethnicity: { type: String },
+  sexuality: { type: String },
+
   // phone: { type: String },
   // email: { type: String },
   // contactMethod: { type: [String] },
   // city: { type: String },
-
-  // // Optional fields ---------------------------------
   // picture: { type: String },
   // otherName: { type: String },
   // facebook: { type: String },
@@ -33,15 +57,17 @@ const PersonSchema = new Schema({
   // youtube: { type: String },
   // tiktok: { type: String },
   // website: { type: String },
-  // race: { type: String },
-  // ethnicity: { type: String },
-  // gender: { type: String },
   // disability: { type: String },
   // accommodations: { type: [String] },
   // causes: { type: [String] },
-  // sexuality: { type: String },
 });
 
-PersonSchema.plugin(fuzzySearching, { fields: ['dragName'] });
+PersonaSchema.plugin(fuzzySearching, { fields: ['dragName'] });
+PersonaSchema.methods.getOwners = function(this: PersonaDocument): string[] {
+  return [MUUID.from(this.account).toString()];
+};
 
-export const Persona = model('Persona', PersonSchema);
+export const Persona = model<PersonaDocument, PersonaModel>(
+    'Persona',
+    PersonaSchema,
+);

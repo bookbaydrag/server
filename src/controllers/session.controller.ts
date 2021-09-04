@@ -1,21 +1,20 @@
 import { Request, Response } from 'express';
 import MUUID from 'uuid-mongodb';
 import { Session, Token } from '../models/index.js';
-import { getAuthToken } from '../util/authorization.js';
+import { getAuthToken, validateReqSession } from '../util/authorization.js';
 import {
   handleError,
   validateExists,
   validateNotExpired,
   validateUUID,
 } from '../util/error.js';
-import { ONE_WEEK, setExpiration } from '../util/expiration.js';
 
 const populateRules = {
   path: 'account',
   select: ['_id', 'email', 'personas'],
   populate: {
     path: 'personas',
-    select: ['_id', 'dragName'],
+    select: ['_id', 'dragName', 'account'],
   },
 };
 
@@ -60,21 +59,15 @@ async function createSession(req: Request, res: Response): Promise<void> {
 
 async function validateSession(req: Request, res: Response): Promise<void> {
   try {
-    const authToken = getAuthToken(req);
+    const session = await validateReqSession(req);
 
-    const foundSession = await Session.findById(MUUID.from(authToken));
-    validateExists(foundSession, 'invalid session');
-    validateNotExpired(foundSession.expiration);
-
-    const updatedSession = await Session.findByIdAndUpdate(
-        MUUID.from(authToken),
-        { expiration: setExpiration(ONE_WEEK) },
-        { new: true },
-    )
+    const fullSession = await Session.findById(session._id)
+        .select('_id account')
         .populate(populateRules);
+
     res
         .status(200)
-        .json(updatedSession);
+        .json(fullSession);
   } catch (error) {
     handleError(res, error);
   }

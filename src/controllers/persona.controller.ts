@@ -1,23 +1,26 @@
 import { Request, Response } from 'express';
 import MUUID from 'uuid-mongodb';
 import { Account, Persona } from '../models/index.js';
-import { handleError, validateExists } from '../util/error.js';
+import { validateOwner, validateReqSession } from '../util/authorization.js';
+import { handleError } from '../util/error.js';
 
 const createPersona = async (req: Request, res: Response): Promise<void> => {
   try {
-    const accountID: string = req.body.account;
-    const linkedAccount = await Account.findById(MUUID.from(accountID));
-    if (!linkedAccount) {
-      res
-          .status(404)
-          .json({
-            error: 'account not found',
-          });
-      return;
-    }
+    // Get session from auth token
+    const session = await validateReqSession(req);
 
-    const newPersona = await Persona.create(req.body);
+    // Get account from session
+    const accountID = MUUID.from(session.account).toString();
+    const personaData = {
+      ...req.body,
+      account: accountID,
+    };
+
+    // Create persona
+    const newPersona = await Persona.create(personaData);
     const personaID = newPersona._id;
+
+    // Add persona to account
     await Account.findByIdAndUpdate(
         MUUID.from(accountID),
         {
@@ -26,10 +29,10 @@ const createPersona = async (req: Request, res: Response): Promise<void> => {
           },
         },
     );
+
     res.json(newPersona);
   } catch (error) {
-    console.log(error);
-    res.json(error);
+    handleError(res, error);
   }
 };
 
@@ -38,7 +41,7 @@ const indexPersonas = async (req: Request, res: Response): Promise<void> => {
     const foundPersonas = await Persona.find({});
     res.json(foundPersonas);
   } catch (error) {
-    res.json(error);
+    handleError(res, error);
   }
 };
 
@@ -47,54 +50,67 @@ const getPersona = async (req: Request, res: Response): Promise<void> => {
     const foundPersona = await Persona.findById(MUUID.from(req.params.id));
     res.json(foundPersona);
   } catch (error) {
-    res.json(error);
+    handleError(res, error);
   }
 };
 
 const updatePersona = async (req: Request, res: Response): Promise<void> => {
   try {
-    const updatedPerson = await Persona.findByIdAndUpdate(
-        MUUID.from(req.params.id),
-        req.body,
-        { new: true },
-    );
-    res.json(updatedPerson);
+    const personaID = req.params.id;
+    const session = await validateReqSession(req);
+
+    const foundPersona = await Persona.findById(MUUID.from(personaID));
+    validateOwner(session, foundPersona);
+
+    delete req.body._id;
+
+    if (foundPersona) {
+      const updatedPersona = await Persona.findByIdAndUpdate(
+          foundPersona._id,
+          req.body,
+          { new: true },
+      );
+      res.json(updatedPersona);
+    }
   } catch (error) {
-    res.json(error);
+    handleError(res, error);
   }
 };
 
 const deletePersona = async (req: Request, res: Response): Promise<void> => {
   try {
-    const deleted = await Persona.findByIdAndDelete(MUUID.from(req.params.id));
-    if (!deleted) {
-      res
-          .status(404)
-          .json({
-            error: 'persona not found',
-          });
-      return;
-    }
-    await Account.findByIdAndUpdate(
-        MUUID.from(deleted.account),
-        {
-          $pull: {
-            personas: deleted.account,
+    // Get session from auth token
+    const session = await validateReqSession(req);
+
+    // Find persona and validate owner
+    const personaID = req.params.id;
+    const foundPersona = await Persona.findById(MUUID.from(personaID));
+    validateOwner(session, foundPersona);
+
+    // Delete persona
+    const deleted = await Persona.findByIdAndDelete(MUUID.from(personaID));
+
+    // Remove persona from account
+    if (deleted) {
+      await Account.findByIdAndUpdate(
+          MUUID.from(deleted.account),
+          {
+            $pull: {
+              personas: deleted.account,
+            },
           },
-        },
-    );
-    res.json(deleted);
+      );
+    }
+
+    res.sendStatus(204);
   } catch (error) {
-    res.json(error);
+    handleError(res, error);
   }
 };
 
 const searchPersonas = async (req: Request, res: Response): Promise<void> => {
   try {
     const searchTerm: string = req.params.searchTerm;
-    validateExists(searchTerm);
-
-    // @ts-ignore
     const foundPersonas = await Persona.fuzzySearch(searchTerm);
 
     res
