@@ -1,12 +1,22 @@
 import { Request, Response } from 'express';
 import MUUID from 'uuid-mongodb';
-import { Account, Session, Token } from '../models/index.js';
+import { Session, Token } from '../models/index.js';
+import { getAuthToken, validateReqSession } from '../util/authorization.js';
 import {
   handleError,
   validateExists,
   validateNotExpired,
   validateUUID,
 } from '../util/error.js';
+
+const populateRules = {
+  path: 'account',
+  select: ['_id', 'email', 'personas'],
+  populate: {
+    path: 'personas',
+    select: ['_id', 'dragName', 'account'],
+  },
+};
 
 async function createSession(req: Request, res: Response): Promise<void> {
   try {
@@ -33,22 +43,48 @@ async function createSession(req: Request, res: Response): Promise<void> {
       account: foundToken.account,
     });
 
-    // Return the session ID and account info
-    const account = await Account.findById(
-        MUUID.from(foundToken.account),
+    const newSessionWithAccount = await Session.findById(
+        MUUID.from(newSession._id),
     )
-        .populate({
-          path: 'personas',
-          select: ['_id', 'dragName'],
-        });
+        .populate(populateRules);
 
     res
         .status(200)
-        .json({
-          id: newSession._id,
-          account,
-        });
+        .json(newSessionWithAccount);
     return;
+  } catch (error) {
+    handleError(res, error);
+  }
+}
+
+async function validateSession(req: Request, res: Response): Promise<void> {
+  try {
+    const session = await validateReqSession(req);
+
+    const fullSession = await Session.findById(session._id)
+        .select('_id account')
+        .populate(populateRules);
+
+    res
+        .status(200)
+        .json(fullSession);
+  } catch (error) {
+    handleError(res, error);
+  }
+}
+
+async function removeSession(req: Request, res: Response): Promise<void> {
+  try {
+    const authToken = getAuthToken(req);
+
+    const removedSession = await Session.findByIdAndDelete(
+        MUUID.from(authToken),
+    )
+        .select(['_id', 'account']);
+
+    res
+        .status(200)
+        .json(removedSession);
   } catch (error) {
     handleError(res, error);
   }
@@ -56,4 +92,6 @@ async function createSession(req: Request, res: Response): Promise<void> {
 
 export const SessionController = {
   createSession,
+  validateSession,
+  removeSession,
 };

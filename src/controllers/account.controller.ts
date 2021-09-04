@@ -25,8 +25,6 @@ const getAccount = async (req: Request, res: Response): Promise<void> => {
 };
 
 const updateAccount = async (req: Request, res: Response): Promise<void> => {
-  console.log(req.body);
-
   try {
     const updatedAccount = await Account.findByIdAndUpdate(
         MUUID.from(req.params.id),
