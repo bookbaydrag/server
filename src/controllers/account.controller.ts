@@ -16,7 +16,7 @@ const getAccount = async (req: Request, res: Response): Promise<void> => {
     const account = await Account.findById(MUUID.from(req.params.id))
         .populate({
           path: 'personas',
-          select: ['_id', 'dragName'],
+          select: ['_id', 'stageName'],
         });
     res.json(account);
   } catch (error) {
@@ -33,7 +33,7 @@ const updateAccount = async (req: Request, res: Response): Promise<void> => {
     )
         .populate({
           path: 'personas',
-          select: ['_id', 'dragName'],
+          select: ['_id', 'stageName'],
         });
     res.json(updatedAccount);
   } catch (error) {
