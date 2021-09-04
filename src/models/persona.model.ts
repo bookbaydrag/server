@@ -8,7 +8,7 @@ const { Schema, model } = mongoose;
 const { v4: uuid } = MUUID;
 
 export interface BasePersona {
-  dragName: string;
+  stageName: string;
   pronouns: string;
   account: any;
   gender: string;
@@ -33,7 +33,7 @@ const PersonaSchema = new Schema<PersonaDocument>({
     ...binaryUUID,
     default: uuid,
   },
-  dragName: { type: String, required: true },
+  stageName: { type: String, required: true },
   pronouns: { type: String },
   account: {
     ...binaryUUID,
@@ -62,7 +62,7 @@ const PersonaSchema = new Schema<PersonaDocument>({
   // causes: { type: [String] },
 });
 
-PersonaSchema.plugin(fuzzySearching, { fields: ['dragName'] });
+PersonaSchema.plugin(fuzzySearching, { fields: ['stageName'] });
 PersonaSchema.methods.getOwners = function(this: PersonaDocument): string[] {
   return [MUUID.from(this.account).toString()];
 };

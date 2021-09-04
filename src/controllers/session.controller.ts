@@ -14,7 +14,7 @@ const populateRules = {
   select: ['_id', 'email', 'personas'],
   populate: {
     path: 'personas',
-    select: ['_id', 'dragName', 'account'],
+    select: ['_id', 'stageName', 'account'],
   },
 };
 

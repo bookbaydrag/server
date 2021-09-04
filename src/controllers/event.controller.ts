@@ -4,11 +4,11 @@ import { Event } from '../models/index.js';
 
 const populateRules = [{
   path: 'performers',
-  select: ['_id', 'dragName'],
+  select: ['_id', 'stageName'],
 },
 {
   path: 'host',
-  select: ['_id', 'dragName'],
+  select: ['_id', 'stageName'],
 }];
 
 const createEvent = async (req: Request, res: Response): Promise<void> => {

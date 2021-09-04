@@ -14,9 +14,9 @@ async function seed() {
     const personas = data
         .split('\r\n')
         .map((line) => {
-          const [dragName, city, instagram, pronouns] = line.split(',');
+          const [stageName, city, instagram, pronouns] = line.split(',');
           return {
-            dragName,
+            stageName,
             city,
             instagram,
             pronouns,
