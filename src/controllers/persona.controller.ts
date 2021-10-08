@@ -111,6 +111,12 @@ const deletePersona = async (req: Request, res: Response): Promise<void> => {
 const searchPersonas = async (req: Request, res: Response): Promise<void> => {
   try {
     const searchTerm: string = req.params.searchTerm;
+    if (!searchTerm) {
+      res
+          .status(200)
+          .json([]);
+    }
+
     const foundPersonas = await Persona.fuzzySearch(searchTerm);
 
     res
