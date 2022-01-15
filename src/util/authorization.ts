@@ -2,7 +2,7 @@ import { Request } from 'express';
 import MUUID from 'uuid-mongodb';
 import { Account } from '../models/account.model.js';
 import { PersonaDocument } from '../models/persona.model.js';
-import { Session } from '../models/session.model.js';
+import { Session, SessionDocument } from '../models/session.model.js';
 import {
   ServerError,
   validateExists,
@@ -17,14 +17,16 @@ export function getAuthToken(req: Request): string {
   return authToken;
 }
 
-export async function validateReqSession( req: Request): Promise<any> {
+export async function validateReqSession( req: Request): Promise<SessionDocument> {
   try {
     const authToken = getAuthToken(req);
+    console.log(authToken);
 
-    const foundSession = await Session.findById(
-        MUUID.from(authToken),
-    );
-    validateExists(foundSession, 'invalid session');
+    const foundSession = validateExists<SessionDocument>(
+        await Session.findById(
+            MUUID.from(authToken),
+        ),
+        'invalid session');
     validateNotExpired(foundSession.expiration);
 
     const accountID = foundSession.account;
@@ -33,14 +35,13 @@ export async function validateReqSession( req: Request): Promise<any> {
       throw new ServerError(401, 'no such user');
     }
 
-
     return foundSession;
   } catch (error) {
     throw new ServerError(401);
   }
 }
 
-export function validateOwner(session: any, item: OwnedDocuments): void {
+export function validateOwner(session: SessionDocument, item: OwnedDocuments): void {
   if (item) {
     const account = MUUID.from(session.account).toString();
     if (!item.getOwners().includes(account)) {
@@ -53,4 +54,4 @@ export interface Owned {
   getOwners: ()=>string[];
 }
 
-type OwnedDocuments = PersonaDocument | null;
+type OwnedDocuments = PersonaDocument;

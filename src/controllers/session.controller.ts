@@ -9,9 +9,9 @@ import {
   validateUUID,
 } from '../util/error.js';
 
-const populateRules = {
+export const accountPopulateRules = {
   path: 'account',
-  select: ['_id', 'email', 'personas'],
+  select: ['_id', 'email', 'ethnicity', 'gender', 'locality', 'personas'],
   populate: {
     path: 'personas',
     select: ['_id', 'stageName', 'account'],
@@ -46,7 +46,7 @@ async function createSession(req: Request, res: Response): Promise<void> {
     const newSessionWithAccount = await Session.findById(
         MUUID.from(newSession._id),
     )
-        .populate(populateRules);
+        .populate(accountPopulateRules);
 
     res
         .status(200)
@@ -63,7 +63,7 @@ async function validateSession(req: Request, res: Response): Promise<void> {
 
     const fullSession = await Session.findById(session._id)
         .select('_id account')
-        .populate(populateRules);
+        .populate(accountPopulateRules);
 
     res
         .status(200)
