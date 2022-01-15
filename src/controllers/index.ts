@@ -1,4 +1,5 @@
 export { AccountController } from './account.controller.js';
+export { EmailPairController } from './emailPair.controller.js';
 export { EventController } from './event.controller.js';
 export { PersonController } from './persona.controller.js';
 export { SessionController } from './session.controller.js';
