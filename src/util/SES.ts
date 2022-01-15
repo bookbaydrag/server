@@ -1,5 +1,6 @@
 import AWS, { AWSError } from 'aws-sdk';
 import { PromiseResult } from 'aws-sdk/lib/request';
+import { DEV_ENV } from './env.js';
 
 const Addresses = {
   ContactDefault: '"Book Bay Drag Contact Message" <contact@bookbaydrag.com>',
@@ -10,9 +11,10 @@ AWS.config.update({ region: 'us-west-2' });
 const sesv2 = new AWS.SESV2({ apiVersion: 'latest' });
 
 function createMagicLinkEmail(token: string): string {
-  // const magicLink = `https://bookbaydrag.com/account/${token}`;
-  const magicLink = `http://localhost:3000/account/${token}`;
-  return `Follow this link to complete sign-in. ${magicLink}\n${token}`;
+  const magicLink = DEV_ENV ?
+    `http://localhost:3000/account/${token}` :
+    `https://bookbaydrag.com/account/${token}`;
+  return `Book Bay Drag\n\nFollow this link to complete sign-in. ${magicLink}${DEV_ENV ? `\n\n${token}` : ''}`;
 }
 
 export async function sendActivationEmail(

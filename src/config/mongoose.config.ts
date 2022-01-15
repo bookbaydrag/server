@@ -1,12 +1,10 @@
 import mongoose, { Mongoose } from 'mongoose';
-import dotenv from 'dotenv';
+import { MONGODB_URI } from '../util/env.js';
 
 export const dbConnect = async (): Promise<Mongoose> => {
   try {
-    dotenv.config();
-    const DBURI = process.env.MONGODB_URI || '';
     console.info('Connecting to database...');
-    await mongoose.connect(DBURI, {
+    await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useFindAndModify: false,
       useCreateIndex: true,
