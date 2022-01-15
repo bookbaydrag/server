@@ -6,7 +6,7 @@ env:
     DOCKER_HUB_USERNAME: /build/docker.hub.username
 
 phases:
-  pre-build:
+  pre_build:
     commands:
       - docker login --username "${DOCKER_HUB_USERNAME}" --password "${DOCKER_HUB_PASSWORD}"
   build:
