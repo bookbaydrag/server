@@ -15,22 +15,23 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.980.0",
+    "aws-sdk": "^2.1058.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "mailparser": "^3.4.0",
-    "mongoose": "^5.13.8",
+    "mongoose": "^5.13.14",
     "mongoose-fuzzy-searching": "^2.0.2",
-    "uuid-mongodb": "^2.4.4"
+    "uuid-mongodb": "^2.5.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
-    "@typescript-eslint/eslint-plugin": "^4.30.0",
-    "@typescript-eslint/parser": "^4.30.0",
+    "@types/mailparser": "^3.4.0",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
-    "typescript": "^4.4.2"
+    "typescript": "^4.5.4"
   }
 }
