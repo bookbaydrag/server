@@ -15,8 +15,9 @@ module.exports = {
     '@typescript-eslint',
   ],
   'rules': {
+    'max-len': 'off',
+    'new-cap': 'off',
     'object-curly-spacing': ['warn', 'always'],
     'require-jsdoc': 'off',
-    'new-cap': 'off',
   },
 };

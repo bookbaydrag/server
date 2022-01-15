@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import MUUID from 'uuid-mongodb';
+import { Maybe } from './types/types';
 
 export class ServerError extends Error {
   private _statusCode: number
@@ -40,10 +41,11 @@ export function validateUUID(
   }
 }
 
-export function validateExists(item: unknown, message?: string): void {
+export function validateExists<T>(item: Maybe<T>, message?: string): T {
   if (!item) {
     throw new ServerError(404, message);
   }
+  return item;
 }
 
 export function validateNotExpired(time: number, message?: string): void {

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import MUUID from 'uuid-mongodb';
 import { Event } from '../models/index.js';
 
-const populateRules = [{
+const eventPopulateRules = [{
   path: 'performers',
   select: ['_id', 'stageName'],
 },
@@ -14,7 +14,7 @@ const populateRules = [{
 const createEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const newEvent = await Event.create(req.body);
-    await Event.populate(newEvent, populateRules);
+    await Event.populate(newEvent, eventPopulateRules);
     res.status(201).json(newEvent);
   } catch (error) {
     res.status(400).json(error);
@@ -23,7 +23,7 @@ const createEvent = async (req: Request, res: Response): Promise<void> => {
 
 const getAllEvents = async (req: Request, res: Response): Promise<void> => {
   try {
-    const events = await Event.find({}).populate(populateRules);
+    const events = await Event.find({}).populate(eventPopulateRules);
     res.status(200).json(events);
   } catch (error) {
     res.status(500).json(error);
@@ -34,7 +34,7 @@ const getOneEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const event = await Event.findById(
         MUUID.from(req.params.id),
-    ).populate(populateRules);
+    ).populate(eventPopulateRules);
     if (!event) {
       res.sendStatus(404);
     }
@@ -50,7 +50,7 @@ const updateEvent = async (req: Request, res: Response): Promise<void> => {
         MUUID.from(req.params.id),
         req.body,
         { new: true },
-    ).populate(populateRules);
+    ).populate(eventPopulateRules);
     if (!updateEvent) {
       res.sendStatus(404);
     }

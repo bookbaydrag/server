@@ -1,35 +1,49 @@
-import fs from 'fs';
-import { dbConnect, dbDisconnect } from './config/mongoose.config.js';
-import { Persona } from './models/index.js';
+// import { dbConnect, dbDisconnect } from './config/mongoose.config.js';
+// import { Persona } from './models/index.js';
+// import seedJSON from '../local/seed.json';
+// import { Account, BaseAccount } from './models/account.model.js';
 
+// type SeedData = {
+//   accounts: BaseAccount[]
+// }
 
-async function seed() {
-  try {
-    await dbConnect();
+// async function seed() {
+//   try {
+//     const seedData: SeedData = seedJSON;
 
-    const deleted = await Persona.deleteMany({});
-    console.log(`Deleted ${deleted.n} personas.`);
+//     const db = await dbConnect();
+//     await db.connection.dropDatabase();
 
-    const data = fs.readFileSync(`${process.cwd()}/local/data.csv`).toString();
-    const personas = data
-        .split('\r\n')
-        .map((line) => {
-          const [stageName, city, instagram, pronouns] = line.split(',');
-          return {
-            stageName,
-            city,
-            instagram,
-            pronouns,
-          };
-        });
+//     seedData.accounts.forEach((account)=>{
+//       const personas = account.personas;
+//       delete account.personas;
 
-    const res = await Persona.create(personas);
-    console.log(`Created ${res.length} personas.`);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    dbDisconnect();
-  }
-}
+//       const newAccount = await Account.create(account);
 
-seed();
+//       personas?.forEach((persona)=>{
+//         const personaData = {
+//           ...persona,
+//           newAccount._id,
+//         };
+
+//         const newPersona = await Persona.create(persona);
+
+//         await Account.findByIdAndUpdate(
+//           newAccount._id,
+//           {
+//             $push: {
+//               personas: newPersona._id,
+//             },
+//           },
+//       );
+
+//       });
+//     });
+//   } catch (error) {
+//     console.error(error);
+//   } finally {
+//     dbDisconnect();
+//   }
+// }
+
+// seed();

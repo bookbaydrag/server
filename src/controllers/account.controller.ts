@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import MUUID from 'uuid-mongodb';
-import { Account } from '../models/index.js';
+import { Gender, Locality } from '../util/types/types.js';
+import { Account, Persona } from '../models/index.js';
+import { validateExists } from '../util/error.js';
 
 const createAccount = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -26,16 +28,29 @@ const getAccount = async (req: Request, res: Response): Promise<void> => {
 
 const updateAccount = async (req: Request, res: Response): Promise<void> => {
   try {
-    const updatedAccount = await Account.findByIdAndUpdate(
-        MUUID.from(req.params.id),
-        req.body,
-        { new: true },
-    )
-        .populate({
-          path: 'personas',
-          select: ['_id', 'stageName'],
-        });
-    res.json(updatedAccount);
+    const updatedAccount = validateExists(
+        await Account.findByIdAndUpdate(
+            MUUID.from(req.params.id),
+            req.body,
+            { new: true },
+        )
+            .populate({
+              path: 'personas',
+              select: ['_id', 'stageName'],
+            }),
+    );
+
+    await Promise.all(updatedAccount.personas.map(async function(persona) {
+      validateExists(await Persona.findByIdAndUpdate(persona._id, {
+        ethnicity: updatedAccount.ethnicity,
+        gender: updatedAccount.gender as Gender,
+        locality: updatedAccount.locality as Locality,
+      }));
+    }));
+
+    res
+        .status(200)
+        .json(updatedAccount);
   } catch (error) {
     res.json(error);
   }
