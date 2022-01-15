@@ -6,6 +6,7 @@ import {
   addServerToSignalHandling,
   initSignalHandling,
 } from './util/signal.js';
+import { startEmailPolling } from './events/email.events.js';
 
 const server = async (): Promise<void> => {
   initSignalHandling();
@@ -18,6 +19,8 @@ const server = async (): Promise<void> => {
 
   // Routes
   app.use('/v1', APIRouterV1);
+
+  startEmailPolling();
 
   const port = 8000;
 
