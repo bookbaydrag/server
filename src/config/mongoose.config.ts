@@ -12,7 +12,8 @@ export const dbConnect = async (): Promise<Mongoose> => {
     });
     console.info('DB connection successful');
   } catch (error) {
-    console.info('Error connecting to database:\n' + error);
+    console.error('Error connecting to database:');
+    console.error(error);
   } finally {
     return mongoose;
   }

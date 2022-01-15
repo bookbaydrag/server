@@ -1,27 +1,28 @@
 import AWS from 'aws-sdk';
 import { simpleParser } from 'mailparser';
 import { SQS_URL } from '../util/env.js';
+import { terminateServer } from '../util/signal.js';
 
-const SQS = new AWS.SQS({ apiVersion: 'latest' } );
+AWS.config.update({ region: 'us-west-2', apiVersion: 'latest' });
+const SQS = new AWS.SQS();
 const S3 = new AWS.S3();
 
-
 async function pollSQS() {
-  while (true) {
-    const req = await SQS.receiveMessage({
-      QueueUrl: SQS_URL,
-      WaitTimeSeconds: 20,
-      MaxNumberOfMessages: 10,
-    }).promise();
+  try {
+    console.info('Polling email SQS queue');
+    while (true) {
+      const req = await SQS.receiveMessage({
+        QueueUrl: SQS_URL,
+        WaitTimeSeconds: 20,
+        MaxNumberOfMessages: 10,
+      }).promise();
 
-    req.Messages?.forEach(async (message)=>{
-      relayEmail(message);
-    });
+      req.Messages?.forEach(relayEmail);
+    }
+  } catch (error) {
+    console.error(error);
+    terminateServer();
   }
-}
-
-export function startEmailPolling() {
-  pollSQS();
 }
 
 async function relayEmail(sqsMessage: any) {
@@ -75,3 +76,7 @@ async function relayEmail(sqsMessage: any) {
     console.error(error);
   }
 };
+
+export function startEmailPolling() {
+  pollSQS();
+}

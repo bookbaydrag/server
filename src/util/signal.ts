@@ -39,3 +39,10 @@ export function initSignalHandling() {
     });
   });
 };
+
+export function terminateServer(message?: string): void {
+  if (message) {
+    console.info(message);
+  }
+  process.kill(process.pid);
+}
