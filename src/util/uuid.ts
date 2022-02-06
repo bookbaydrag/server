@@ -57,3 +57,7 @@ export const binaryUUIDArray = {
   ...binaryUUID,
   type: ['object'],
 };
+
+export function stringFromMUUID(binary: Binary): string {
+  return MUUID.from(binary).toString();
+}

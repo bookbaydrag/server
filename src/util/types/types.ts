@@ -21,3 +21,29 @@ export enum Locality {
   SB = 'South Bay',
   UN = ''
 }
+
+export type CleanupRequest = {
+  s3?: AWS.S3.DeleteObjectRequest;
+  sqs?: AWS.SQS.DeleteMessageRequest;
+}
+
+export type SingleEmail = {
+  email: string;
+  name: string;
+  localPart: string;
+  compiled: string;
+};
+
+export type EmailDetails = {
+  from: SingleEmail;
+  to: SingleEmail;
+}
+
+export type SQSEmailMessage = {
+  receipt: {
+    action: {
+      bucketName: string;
+      objectKey: string;
+    };
+  };
+}
