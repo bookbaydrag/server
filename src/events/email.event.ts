@@ -45,7 +45,6 @@ async function pollSQS() {
 }
 
 async function relayEmail(sqsMessage: AWS.SQS.Message) {
-  console.log('email received');
   try {
     // Typescript trickery
     const rawMessage = sqsMessage as Required<AWS.SQS.Message>;
@@ -70,8 +69,6 @@ async function relayEmail(sqsMessage: AWS.SQS.Message) {
 
       const mail: ParsedMail = await simpleParser(raw.Body as Buffer);
       const details = await extractFromTo(mail);
-
-      console.info(details);
 
       const params: AWS.SESV2.Types.SendEmailRequest = {
         Content: {
