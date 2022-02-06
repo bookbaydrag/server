@@ -1,0 +1,18 @@
+version: 0.2
+
+env:
+  parameter-store:
+    DOCKER_HUB_PASSWORD: /build/docker.hub.password
+    DOCKER_HUB_USERNAME: /build/docker.hub.username
+
+phases:
+  pre_build:
+    commands:
+      - docker login --username "${DOCKER_HUB_USERNAME}" --password "${DOCKER_HUB_PASSWORD}"
+  build:
+    commands:
+      - aws_account="$(aws sts get-caller-identity --output text | cut -f1)"
+      - docker build -t "${aws_account}.dkr.ecr.${AWS_REGION}.amazonaws.com/bbd-server:latest" .
+      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin "${aws_account}.dkr.ecr.us-west-2.amazonaws.com"
+      - docker push "${aws_account}.dkr.ecr.${AWS_REGION}.amazonaws.com/bbd-server:latest"
+      - aws ecs update-service --cluster bbd-cluster --service bbd-server --force-new-deployment > /dev/null
