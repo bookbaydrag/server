@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 
+import AWS from 'aws-sdk';
 export type Maybe<T> = T | null | undefined;
 
 export enum Ethnicity {
