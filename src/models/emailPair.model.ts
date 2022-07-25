@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import MUUID from 'uuid-mongodb';
 import {
   binaryUUID,
@@ -24,15 +24,15 @@ export interface EmailPairDocument extends BaseEmailPair, Document {};
 
 const EmailPairSchema = new Schema<EmailPairDocument>({
   _id: {
-    ...binaryUUID,
+    ...binaryUUID as object,
     default: uuid,
   },
   localParts: {
-    ...binaryUUIDArray,
+    ...binaryUUIDArray as object,
     default: twoUUIDs,
   },
   accounts: {
-    ...binaryUUIDArray,
+    ...binaryUUIDArray as object,
     ref: 'Account',
     set: toUUID,
   },

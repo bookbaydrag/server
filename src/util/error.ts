@@ -3,7 +3,7 @@ import MUUID from 'uuid-mongodb';
 import { Maybe } from './types/types';
 
 export class ServerError extends Error {
-  private _statusCode: number
+  private _statusCode: number;
 
   constructor(status: number, message?: string) {
     if (!message) {

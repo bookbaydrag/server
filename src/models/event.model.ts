@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Model, Document } from 'mongoose';
 import MUUID from 'uuid-mongodb';
 import {
   binaryUUID,
@@ -17,10 +17,11 @@ export interface BaseEvent {
 }
 
 export interface EventDocument extends BaseEvent, Document {};
+export type EventModel = Model<EventDocument>;
 
-const EventSchema = new Schema<EventDocument>({
+const EventSchema = new Schema<EventDocument, EventModel>({
   _id: {
-    ...binaryUUID,
+    ...binaryUUID as object,
     default: uuid,
   },
   name: {
@@ -32,12 +33,12 @@ const EventSchema = new Schema<EventDocument>({
     required: true,
   },
   hosts: {
-    ...binaryUUIDArray,
+    ...binaryUUIDArray as object,
     ref: 'Persona',
     set: toUUID,
   },
   performers: {
-    ...binaryUUIDArray,
+    ...binaryUUIDArray as object,
     ref: 'Persona',
     set: toUUID,
   },

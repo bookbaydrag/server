@@ -20,11 +20,11 @@ export type SessionModel = Model<SessionDocument>;
 
 const SessionSchema = new Schema<SessionDocument>({
   _id: {
-    ...binaryUUID,
+    ...binaryUUID as object,
     default: uuid,
   },
   account: {
-    ...binaryUUID,
+    ...binaryUUID as object,
     ref: 'Account',
     set: toUUID,
   },

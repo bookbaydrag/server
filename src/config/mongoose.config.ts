@@ -5,10 +5,8 @@ export const dbConnect = async (): Promise<Mongoose> => {
   try {
     console.info('Connecting to database...');
     await mongoose.connect(MONGODB_URI, {
-      useNewUrlParser: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
+      autoIndex: true,
+      autoCreate: true,
     });
     console.info('DB connection successful');
   } catch (error) {

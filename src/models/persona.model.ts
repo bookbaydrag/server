@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import mongoose, { Document, Model } from 'mongoose';
-import fuzzySearching from 'mongoose-fuzzy-searching';
+import fuzzySearching from 'mongoose-fuzzy-searching-v3';
 import MUUID from 'uuid-mongodb';
 import { Owned } from '../util/authorization.js';
 import { Gender, Locality } from '../util/types/types.js';
@@ -30,17 +30,17 @@ export interface PersonaModel extends Model<PersonaDocument>, Owned {
 
 const PersonaSchema = new Schema<PersonaDocument>({
   _id: {
-    ...binaryUUID,
+    ...binaryUUID as object,
     default: uuid,
   },
   account: {
-    ...binaryUUID,
+    ...binaryUUID as object,
     ref: 'Account',
     set: toUUID,
   },
   ethnicity: { type: 'string' },
-  gender: { type: Gender },
-  locality: { type: Locality },
+  gender: { type: String, enum: Gender },
+  locality: { type: String, enum: Locality },
   pronouns: { type: String },
   stageName: { type: String, required: true },
 
