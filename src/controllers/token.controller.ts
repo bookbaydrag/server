@@ -4,7 +4,6 @@ import { Account, Token } from '../models/index.js';
 import { sendActivationEmail } from '../util/SES.js';
 
 const sendMagicLink = async (req: Request, res: Response): Promise<void> => {
-  console.log('sendMagicLink');
   try {
     let email: string = req.body.email;
     if (!email) {
