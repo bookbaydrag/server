@@ -1,4 +1,5 @@
 import { Binary } from 'bson';
+import { SchemaDefinitionProperty } from 'mongoose';
 import MUUID from 'uuid-mongodb';
 
 type StringForUUID = string | string[];
@@ -47,13 +48,13 @@ export function fromUUID(
   }
 }
 
-export const binaryUUID = {
+export const binaryUUID: Partial<SchemaDefinitionProperty<object>> = {
   type: 'object',
   value: { type: 'Buffer' },
   transform: fromUUID,
 };
 
-export const binaryUUIDArray = {
+export const binaryUUIDArray: Partial<SchemaDefinitionProperty<object[]>> = {
   ...binaryUUID,
-  type: ['object'],
+  type: [],
 };

@@ -28,17 +28,19 @@ const getAccount = async (req: Request, res: Response): Promise<void> => {
 
 const updateAccount = async (req: Request, res: Response): Promise<void> => {
   try {
-    const updatedAccount = validateExists(
+    let updatedAccount = validateExists(
         await Account.findByIdAndUpdate(
             MUUID.from(req.params.id),
             req.body,
             { new: true },
-        )
-            .populate({
-              path: 'personas',
-              select: ['_id', 'stageName'],
-            }),
-    );
+        ));
+
+
+    updatedAccount = await updatedAccount.populate({
+      path: 'personas',
+      select: ['_id', 'stageName'],
+    });
+
 
     await Promise.all(updatedAccount.personas.map(async function(persona) {
       validateExists(await Persona.findByIdAndUpdate(persona._id, {

@@ -1,6 +1,6 @@
 import mongoose, { Document, Model } from 'mongoose';
 import MUUID from 'uuid-mongodb';
-import { Gender, Locality } from '../util/types/types.js';
+import { Ethnicity, Gender, Locality } from '../util/types/types.js';
 import { binaryUUID, binaryUUIDArray, toUUID } from '../util/uuid.js';
 import { PersonaDocument } from './persona.model.js';
 
@@ -19,9 +19,9 @@ export type BaseAccount = Required<NewAccount>;
 export interface AccountDocument extends BaseAccount, Document {};
 export type AccountModel = Model<AccountDocument>;
 
-const AccountSchema = new Schema<AccountDocument>({
+const AccountSchema = new Schema<AccountDocument, AccountModel>({
   _id: {
-    ...binaryUUID,
+    ...binaryUUID as object,
     default: uuid,
   },
   email: {
@@ -33,18 +33,21 @@ const AccountSchema = new Schema<AccountDocument>({
   },
   ethnicity: {
     type: String,
-    default: '',
+    enum: Ethnicity,
+    default: Ethnicity.UNSET,
   },
   gender: {
-    type: Gender,
-    default: '',
+    type: String,
+    enum: Gender,
+    default: Gender.UNSET,
   },
   locality: {
-    type: Locality,
-    default: '',
+    type: String,
+    enum: Locality,
+    default: Locality.UN,
   },
   personas: {
-    ...binaryUUIDArray,
+    ...binaryUUIDArray as object,
     ref: 'Persona',
     set: toUUID,
   },

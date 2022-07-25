@@ -8,11 +8,11 @@ const { v4: uuid } = MUUID;
 
 const TokenSchema = new Schema({
   _id: {
-    ...binaryUUID,
+    ...binaryUUID as object,
     default: uuid,
   },
   account: {
-    ...binaryUUID,
+    ...binaryUUID as object,
     ref: 'Account',
     set: toUUID,
   },

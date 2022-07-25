@@ -6,6 +6,7 @@ module.exports = {
   'extends': [
     'google',
   ],
+  'ignorePatterns': ['build/*'],
   'parser': '@typescript-eslint/parser',
   'parserOptions': {
     'ecmaVersion': 12,
@@ -19,5 +20,7 @@ module.exports = {
     'new-cap': 'off',
     'object-curly-spacing': ['warn', 'always'],
     'require-jsdoc': 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
   },
 };

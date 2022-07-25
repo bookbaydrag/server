@@ -30,7 +30,7 @@ const sendMagicLink = async (req: Request, res: Response): Promise<void> => {
     // Create a new token
     token = await Token.create({ account: account._id });
 
-    sendActivationEmail(email, token._id);
+    await sendActivationEmail(email, token._id);
     res
         .status(200)
         .json(token);

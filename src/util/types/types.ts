@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 export type Maybe<T> = T | null | undefined;
 
 export enum Ethnicity {
